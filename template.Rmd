@@ -1,21 +1,73 @@
 ---
-title: "Simple document"
-output: html_document
+title: "Simulation_data_generate"
+output: pdf_document
 ---
 
-I'm an R Markdown document! 
+```{r setup, echo = FALSE, warnings = FALSE}
+library(tidyverse)
+library(survival)
+library(pracma)
 
-# Section 1
+knitr::opts_chunk$set(
+  fig.width = 6,
+  fig.asp = .6,
+  out.width = "90%",
+  warning = FALSE
+)
 
-Here's a **code chunk** that samples from 
-a _normal distribution_:
+theme_set(theme_minimal() + theme(legend.position = "bottom"))
 
-```{r}
-samp = rnorm(100)
-length(samp)
+options(
+  ggplot2.continuous.colour = "viridis",
+  ggplot2.continuous.fill = "viridis"
+)
+
+scale_colour_discrete = scale_colour_viridis_d
+scale_fill_discrete = scale_fill_viridis_d
 ```
 
-# Section 2
 
-I can take the mean of the sample, too!
-The mean is `r mean(samp)`.
+## Generate survival data
+```{r}
+set.seed(666)
+
+# Generate survival data
+genn_dat <- function() {
+  # Generate key for each observation
+  id <- seq(1:n)
+  
+  # Predictor X (treatment = 1; control = 0)
+  x <- rbinom(n, size = 1, prob = 0.5)
+  
+  ## --- Generate Survival Time T --- 
+  U <- runif(n)
+  # Use exponential distribution
+  expo <- function(U, lambda, x, beta) {
+    -log(U) / (lambda * exp(x * beta))
+  }
+  
+  # Use weibull distribution
+  weibull <- function(U, lambda, x, gamma, beta) {
+    (-log(U) / (lambda * exp(x * beta))) ^ (1 / gamma)
+  }
+  
+  # Use 'Cox' distribution -- gompertz
+  gompertz <- function(U, alpha, lambda, x, beta) {
+    (1 / alpha) * (1 - alpha * log(U) / (lambda * exp(x * beta)))
+  }
+  
+  # Select different baseline functions
+  if (dist == "expo") {
+    surv_t <- expo(U, lambda, x, beta)}
+  else if (dist == "weibull") {
+    surv_t <- weibull(U, lambda, x, gamma, beta)
+  }
+  else (dist == "gompertz") {
+    surv_t <- gompertz(U, alpha, lambda, x, beta)
+  }
+  
+  ## Use Uncensored data
+  
+}
+```
+
