@@ -32,7 +32,7 @@ scale_fill_discrete = scale_fill_viridis_d
 set.seed(666)
 
 # Generate survival data
-genn_dat <- function() {
+genn_dat <- function(n, lambda, beta, gamma, alpha, dist) {
   # Generate key for each observation
   id <- seq(1:n)
   
@@ -51,6 +51,7 @@ genn_dat <- function() {
     (-log(U) / (lambda * exp(x * beta))) ^ (1 / gamma)
   }
   
+  # --- To be modified (add cox function) ---
   # Use 'Cox' distribution -- gompertz
   gompertz <- function(U, alpha, lambda, x, beta) {
     (1 / alpha) * (1 - alpha * log(U) / (lambda * exp(x * beta)))
@@ -62,12 +63,10 @@ genn_dat <- function() {
   else if (dist == "weibull") {
     surv_t <- weibull(U, lambda, x, gamma, beta)
   }
-  else (dist == "gompertz") {
+  else {
     surv_t <- gompertz(U, alpha, lambda, x, beta)
   }
-  
-  ## Use Uncensored data
-  
 }
 ```
 
+## 
