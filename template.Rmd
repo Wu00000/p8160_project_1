@@ -3,6 +3,15 @@ title: "Simulation_data_generate"
 output: pdf_document
 ---
 
+1. Choose different cox distributions to generate data
+2. Choose different beta
+3. Create functions to simplify codes
+4. Visualization
+  4.1 KM-curve vs. fitted curve
+  4.2 beta ~ MSE with different parameters to generate data
+  4.3 ...
+5. discussion: description, pros and cons
+...
 ```{r setup, echo = FALSE, warnings = FALSE}
 library(tidyverse)
 library(survival)
@@ -77,12 +86,31 @@ genn_dat <- function(n, lambda, beta, gamma, alpha, dist) {
 }
 ```
 
+
 ## Fit models
 ```{r}
 # Set the truth (beta = 0.5)
-dat <- genn_dat(n = 10, lambda = 2, beta = 0.5, dist = "expo")
-fit_expo <- survreg(Surv(dat$time) ~ dat$treatment)
 
+# --- MODIFY sample size or beta ---
+# Generate data from exponential
+dat <- genn_dat(n = 10^6, lambda = 2, beta = 0.5, dist = "expo")
+
+# Fit exponential model
+fit_expo <- survreg(Surv(dat$time) ~ dat$treatment, dist = "exponential")
+- fit_expo$coefficients[-1]
+
+# Weibull
+fit_weibull <- survreg(Surv(dat$time) ~ dat$treatment, dist = "weibull")
+- fit_weibull$coefficients[-1] / fit_weibull$scale
+
+# `Cox` -- gompertz
+fit_cox <- coxph(Surv(dat$time) ~ dat$treatment)
+summary(fit_cox)
+```
+
+
+## Visualization
+```{r}
 
 ```
 
