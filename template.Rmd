@@ -66,7 +66,23 @@ genn_dat <- function(n, lambda, beta, gamma, alpha, dist) {
   else {
     surv_t <- gompertz(U, alpha, lambda, x, beta)
   }
+  
+  return(
+    df = data.frame(
+      id = id,
+      treatment = x,
+      time = surv_t
+    )
+  )
 }
 ```
 
-## 
+## Fit models
+```{r}
+# Set the truth (beta = 0.5)
+dat <- genn_dat(n = 10, lambda = 2, beta = 0.5, dist = "expo")
+fit_expo <- survreg(Surv(dat$time) ~ dat$treatment)
+
+
+```
+
