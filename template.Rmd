@@ -89,31 +89,6 @@ genn_dat <- function(n, lambda, beta, gamma, alpha, dist) {
 }
 ```
 
-
-## Fit models
-```{r}
-# Set the truth (beta = 0.5)
-
-# --- MODIFY sample size or beta ---
-# Generate data from exponential
-set.seed(666)
-dat <- genn_dat(n = 10000, lambda = 2, beta = 0.5, gamma = 3, dist = "weibull")
-
-fit_km <- survfit(Surv(dat$time) ~ dat$treatment, data = dat)
-# Fit exponential model
-fit_expo <- flexsurvreg(Surv(dat$time) ~ as.factor(dat$treatment), dist = "exponential", data = dat)
-- fit_expo$coefficients[-1]
-
-# Weibull
-fit_weibull <- survreg(Surv(dat$time) ~ dat$treatment, dist = "weibull")
-- fit_weibull$coefficients[-1] / fit_weibull$scale
-
-# `Cox` -- gompertz
-fit_cox <- coxph(Surv(dat$time) ~ dat$treatment)
-summary(fit_cox)
-```
-
-
 ## Visualization(beta = 0.5)
 
 ### 1. data-exponential(lambda = 2)
@@ -121,7 +96,7 @@ summary(fit_cox)
 ```{r}
 ## Generate Data
 set.seed(666)
-dat_1 <- genn_dat(n = 100, lambda = 2, beta = 0.5, dist = "expo")
+dat_1 <- genn_dat(n = 1000, lambda = 2, beta = 0.5, dist = "expo")
 s_1 <- with(dat_1, Surv(time))
 
 ## Exponential
@@ -197,4 +172,47 @@ lines(survfit(fit_cox_3, newdata = data.frame(treatment = 1)), col = "red", conf
 legend("topright", legend = c('Treatment', 'Control'), col = c('red', 'blue'), lty = 1, cex = 0.8)
 
 ```
+
+3.MSE vs. beta
+
+```{r}
+# --- MSE vs. beta ---
+n = 10^4 # Sample size
+
+sim_result <- function(iteration, n, lambda, beta, gamma, alpha, dist) {
+  # Store estimated beta
+  result <- tibble(
+  expo_beta = rep(NA, iteration),
+  weibull_beta = rep(NA, iteration),
+  cox_beta = rep(NA, iteration)
+  )
+  
+  for(i in 1:iteration) {
+    # Generate data
+    data <- genn_dat(n, lambda, beta, gamma, alpha, dist)
+    
+    # Use exponential model
+    fit_expo <- survreg(Surv(data$time) ~ data$treatment, dist = "exponential")
+    result$expo_beta[i] <- -fit_expo$coefficients[-1]
+    # Use weibull model
+    fit_weibull <- survreg(Surv(data$time) ~ data$treatment, dist = "weibull")
+    result$weibull_beta[i] <- -fit_weibull$coefficients[-1] / fit_weibull$scale
+    # Use gompertz model
+    fit_cox <- coxph(Surv(data$time) ~ data$treatment)
+    result$cox_beta[i] <- fit_cox$coefficients
+    
+  }
+  
+  # Calculate MSE
+  mse <- tibble(
+    expo_mse = sum((result$expo_beta - beta)^2) / iteration,
+    weibull_mse = sum((result$weibull_beta - beta)^2) / iteration,
+    cox_mse = sum((result$cox_beta - beta)^2) / iteration
+  )
+  
+  return(mse)
+}
+
+```
+
 
