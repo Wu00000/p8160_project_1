@@ -16,6 +16,9 @@ output: pdf_document
 library(tidyverse)
 library(survival)
 library(pracma)
+library(ggplot2)
+library(survminer)
+library(flexsurv)
 
 knitr::opts_chunk$set(
   fig.width = 6,
@@ -93,10 +96,11 @@ genn_dat <- function(n, lambda, beta, gamma, alpha, dist) {
 
 # --- MODIFY sample size or beta ---
 # Generate data from exponential
-dat <- genn_dat(n = 10^6, lambda = 2, beta = 0.5, dist = "expo")
+dat <- genn_dat(n = 100, lambda = 2, beta = 0.5, dist = "expo")
 
+fit_km <- survfit(Surv(dat$time) ~ dat$treatment, data = dat)
 # Fit exponential model
-fit_expo <- survreg(Surv(dat$time) ~ dat$treatment, dist = "exponential")
+fit_expo <- flexsurvreg(Surv(dat$time) ~ dat$treatment, dist = "exponential", data = dat)
 - fit_expo$coefficients[-1]
 
 # Weibull
@@ -110,7 +114,26 @@ summary(fit_cox)
 
 
 ## Visualization
+KM-curve vs. fitted curve
+
 ```{r}
 
+```
+
+```{r}
+sum <- summary(fit_expo, data = seq(0, 1, 100))
+
+ggsurvplot(fit_km)$plot 
+  
+
+ggflexsurvplot(fit_expo)$plot
+
+fit <- flexsurvreg(Surv(dat$time) ~ dat$treatment,
+                   dist = "exponential", data = dat)
+ggflexsurvplot(fit)
+
+  
+lines(predict(fit_expo, newdata=data.frame(dat11 = dat$time),type="quantile",p=seq(.01,.99,by=.01)),
+      seq(.99,.01,by=-.01),col="red")
 ```
 
