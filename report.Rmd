@@ -1,0 +1,11 @@
+---
+title: "P8160 Group Project 1: Comparing Three Survival Models Against Missepecified Baseline Models"
+author: "Wenhan Bao | Tianchuan Gao | Jialiang Hua  | Qihang Wu | Paula Wu"
+date: "2/18/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
