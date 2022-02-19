@@ -20,6 +20,7 @@ library(ggplot2)
 library(survminer)
 library(flexsurv)
 library(patchwork)
+
 knitr::opts_chunk$set(
   fig.width = 6,
   fig.asp = .6,
@@ -91,36 +92,33 @@ genn_dat <- function(n, lambda, beta, gamma, alpha, dist) {
 
 ## Visualization(beta = 0.5)
 
-### 1. data-exponential(lambda = 2)
-
 ```{r}
+### 1. data-exponential(lambda = 2)
 ## Generate Data
 set.seed(666)
 dat_1 <- genn_dat(n = 1000, lambda = 2, beta = 0.5, dist = "expo")
 s_1 <- with(dat_1, Surv(time))
 
+par(mfrow=c(3,3))
 ## Exponential
 fit_expo_1 = flexsurvreg(s_1 ~ as.factor(treatment), dist = 'exponential', data = dat_1)
-plot(fit_expo_1, col = c('red', 'blue'), main = "Exponential proportional-hazards model")
+plot(fit_expo_1, col = c('red', 'blue'), main = "Exponential", ylab = "Exponential(2)",cex.lab=1.5, font.lab = 1.5)
 legend("topright", legend = c('Treatment', 'Control'), col = c('red', 'blue'), lty = 1, cex = 0.8)
 
 ## Weibull
 fit_wei_1 = flexsurvreg(s_1 ~ as.factor(treatment), dist = 'weibull', data = dat_1)
-plot(fit_wei_1, col = c('red', 'blue'), main = "Weibull proportional-hazards model")
+plot(fit_wei_1, col = c('red', 'blue'), main = "Weibull")
 legend("topright", legend = c('Treatment', 'Control'), col = c('red', 'blue'), lty = 1, cex = 0.8)
 
 ## Cox
 fit_km_1 = survfit(s_1 ~ treatment, data = dat_1)
-plot(fit_km_1, conf.int = F, main = "Cox proportional-hazards model")
+plot(fit_km_1, conf.int = F, main = "Cox")
 fit_cox_1 = coxph(s_1 ~ as.factor(treatment), data = dat_1)
 lines(survfit(fit_cox_1, newdata = data.frame(treatment = 0)), col = "blue", conf.int = F)
 lines(survfit(fit_cox_1, newdata = data.frame(treatment = 1)), col = "red", conf.int = F)
 legend("topright", legend = c('Treatment', 'Control'), col = c('red', 'blue'), lty = 1, cex = 0.8)
-```
 
 ### 2. data-weibull(lambda = 2, gamma = 1)
-
-```{r}
 ## Generate Data
 set.seed(666)
 dat_2 <- genn_dat(n = 100, lambda = 2, beta = 0.5, gamma = 1, dist = "weibull")
@@ -128,26 +126,23 @@ s_2 = with(dat_2, Surv(time))
 
 ## Exponential
 fit_expo_2 = flexsurvreg(s_2 ~ as.factor(treatment), dist = 'exponential', data = dat_2)
-plot(fit_expo_2, col = c('red', 'blue'), main = "Exponential proportional-hazards model")
+plot(fit_expo_2, col = c('red', 'blue'), main = "Exponential", ylab = "Weibull(1)", cex.lab=1.5, font.lab = 1.5)
 legend("topright", legend = c('Treatment', 'Control'), col = c('red', 'blue'), lty = 1, cex = 0.8)
 
 ## Weibull
 fit_wei_2 = flexsurvreg(s_2 ~ as.factor(treatment), dist = 'weibull', data = dat_2)
-plot(fit_wei_2, col = c('red', 'blue'), main = "Weibull proportional-hazards model")
+plot(fit_wei_2, col = c('red', 'blue'), main = "Weibull")
 legend("topright", legend = c('Treatment', 'Control'), col = c('red', 'blue'), lty = 1, cex = 0.8)
 
 ## Cox
 fit_km_2 = survfit(s_2 ~ treatment, data = dat_2)
-plot(fit_km_2, conf.int = F, main = "Cox proportional-hazards model")
+plot(fit_km_2, conf.int = F, main = "Cox")
 fit_cox_2 = coxph(s_2 ~ as.factor(treatment), data = dat_2)
 lines(survfit(fit_cox_2, newdata = data.frame(treatment = 0)), col = "blue", conf.int = F)
 lines(survfit(fit_cox_2, newdata = data.frame(treatment = 1)), col = "red", conf.int = F)
 legend("topright", legend = c('Treatment', 'Control'), col = c('red', 'blue'), lty = 1, cex = 0.8)
-```
 
 ### 3. data-gompertz(alpha = 2, lambda = 2)
-
-```{r}
 ## Generate Data
 set.seed(666)
 dat_3 <- genn_dat(n = 100, lambda = 2, beta = 0.5, alpha = 2, dist = "gompertz")
@@ -155,22 +150,21 @@ s_3 = with(dat_3, Surv(time))
 
 ## Exponential
 fit_expo_3 = flexsurvreg(s_3 ~ as.factor(treatment), dist = 'exponential', data = dat_3)
-plot(fit_expo_3, col = c('red', 'blue'), main = "Exponential proportional-hazards model")
+plot(fit_expo_3, col = c('red', 'blue'), main = "Exponential", ylab = "Gompertz(2)", xlab = "t", cex.lab=1.5, font.lab = 1.5)
 legend("topright", legend = c('Treatment', 'Control'), col = c('red', 'blue'), lty = 1, cex = 0.8)
 
 ## Weibull
 fit_wei_3 = flexsurvreg(s_3 ~ as.factor(treatment), dist = 'weibull', data = dat_3)
-plot(fit_wei_3, col = c('red', 'blue'), main = "Weibull proportional-hazards model")
+plot(fit_wei_3, col = c('red', 'blue'), main = "Weibull", xlab = "t", cex.lab=1.5)
 legend("topright", legend = c('Treatment', 'Control'), col = c('red', 'blue'), lty = 1, cex = 0.8)
 
 ## Cox
 fit_km = survfit(s_3 ~ treatment, data = dat_3)
-plot(fit_km, conf.int = F, main = "Cox proportional-hazards model")
+plot(fit_km, conf.int = F, main = "Cox", xlab = "t", cex.lab=1.5)
 fit_cox_3 = coxph(s_3 ~ as.factor(treatment), data = dat_3)
 lines(survfit(fit_cox_3, newdata = data.frame(treatment = 0)), col = "blue", conf.int = F)
 lines(survfit(fit_cox_3, newdata = data.frame(treatment = 1)), col = "red", conf.int = F)
 legend("topright", legend = c('Treatment', 'Control'), col = c('red', 'blue'), lty = 1, cex = 0.8)
-
 ```
 
 3.MSE vs. beta
