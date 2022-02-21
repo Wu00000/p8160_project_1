@@ -26,7 +26,7 @@ K-M model and K-M plots are usually used to represent the actual situation of th
 
 ### Statistical Methods
 
-Assume T ($\in [0, \infty]$) is the time to a event of interest. We define a **survival function S(t)** as $$S(t) = Pr(T > t) = \textstyle \int_{0}^{\infty} f(t) dt = 1 - F(t),$$ where $f(t)$ is the density function of T and $F(t)$ can be described as the cumulative density function (CDF) of the survive time. The hazard function $h(t)$ is defined as $$h(t) = \lim_{\vartriangle t \to 0} \frac{Pr(T \in (t, t + \vartriangle t)|T > t}{\vartriangle t} = \frac{f(t)}{S(t)}$$
+Assume T ($\in [0, \infty]$) is the time to a event of interest. We define a **survival function S(t)** as $$S(t) = Pr(T > t) = \textstyle \int_{t}^{\infty} f(t) dt = 1 - F(t),$$ where $f(t)$ is the density function of T and $F(t)$ can be described as the cumulative density function (CDF) of the survive time. The hazard function $h(t)$ is defined as $$h(t) = \lim_{\vartriangle t \to 0} \frac{Pr(T \in (t, t + \vartriangle t)|T > t}{\vartriangle t} = \frac{f(t)}{S(t)}$$
 From the above two formulae, we have $$h(t) = \frac{f(t)}{1 - F(t)} = -\frac{\partial}{\partial t}log[1 - F(t)] = \frac{\partial}{\partial t}log[S(t)]$$
 
 We then integrate both sides of the above equation from 0 to $t$, which yields $\textstyle \int_{0}^{t} h(t) dt = -log[S(t)]$. Assuming $\textstyle \int_{0}^{t} h(t) dt = H(t)$, we get $$S(t) = e^{-H(t)}$$
