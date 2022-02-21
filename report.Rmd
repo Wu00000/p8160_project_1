@@ -56,7 +56,7 @@ Each dataset generated above is used for fitting all three different proportiona
 
 ### Prediction Evaluation
 
-To test the accuracy and efficiency of the models’ evaluations, we use mean squared error(MSE) of the treatment effects ($\beta$) in 1000 simulations. 
+To test the accuracy and efficiency of the models’ evaluations, we use mean squared error(MSE) and the bias of the treatment effects ($\beta$) in 1000 simulations. 
 
 # Results
 
