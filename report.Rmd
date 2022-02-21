@@ -1,7 +1,7 @@
 ---
 title: "P8160 Group Project 1: Evaluation of Three Survival Models Using Simulation"
 author: "Wenhan Bao | Tianchuan Gao | Jialiang Hua  | Qihang Wu | Paula Wu"
-date: "2/18/2022"
+date: "2/20/2022"
 output: pdf_document
 ---
 
@@ -97,7 +97,7 @@ knitr::kable(df2, col.names = c("Model", "Exponential", "Weibull(0.5)",
                                "Weibull(3)", "Gompertz(2)", "Gompertz(4)"))
 ```
 
-\small \centerline{Table2. Mean (SD) of beta from three different proportional-hazard models using 1000 simulationss}
+\small \centerline{Table2. Mean (SD) of beta from three different proportional-hazard models using 1000 simulations}
 
 ```{r, echo = FALSE, message=FALSE, warning=FALSE}
 df3 = tibble(
@@ -133,7 +133,8 @@ For codes please click [$\textcolor{blue}{here}$](https://github.com/Wu00000/p81
 # References
 [1] http://www.stat.columbia.edu/~madigan/W2025/notes/survival.pdf  
 
-[2] Wikipedia. “Gompertz-Makeham law of mortality” https://en.wikipedia.org/wiki/Gompertz%E2%80%93Makeham_law_of_mortality  
+[2] Wikipedia. "Gompertz-Makeham law of mortality"
+https://en.wikipedia.org/wiki/Gompertz%E2%80%93Makeham_law_of_mortality  
 
 [3] Kalbfleisch, J.D. and Prentice, R.L. (2002). The Statistical Analysis of Failure Time Data (3rd ed.). Publisher: Wiley. DOI: 10.1002/9781118032985.
 
